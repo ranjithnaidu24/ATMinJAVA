@@ -5,6 +5,6 @@ public class User {
     private int accNo;
     private String cardNo;
     private int pin;
-    private double balance
+    private double balance;
 
 }
