@@ -66,7 +66,8 @@ public class User {
 	public void addTransaction(String transactionDetail) {
 		transactionHistory.add(transactionDetail);
 	}
-	public List<String> getTransactionHistory(){
+
+	public List<String> getTransactionHistory() {
 		return transactionHistory;
 	}
 }
