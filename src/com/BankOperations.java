@@ -6,7 +6,8 @@ public class BankOperations implements Bank {
 	static Scanner s = new Scanner(System.in);
 
 	public void startTransaction(User user, Bank bank) {
-		int option;
+		try{
+		String optionInput;
 		do {
 			System.out.println("Main menu");
 			System.out.println("1. Balance Enquiry");
@@ -16,30 +17,40 @@ public class BankOperations implements Bank {
 			System.out.println("5. Mini statement");
 			System.out.println("6. Exit");
 			System.out.println("Select an option");
-			option = s.nextInt();
-			switch (option) {
-			case 1:
-				bank.checkBalance(user);
-				break;
-			case 2:
-				bank.cashDeposit(user);
-				break;
-			case 3:
-				bank.cardlessCashDeposit(user);
-				break;
-			case 4:
-				bank.cashWithdraw(user);
-				break;
-			case 5:
-				bank.miniStatement(user);
-				break;
-			case 6:
-				bank.exit(user);
-				break;
-			default:
-				break;
+			
+			optionInput = s.next();
+			//int option =Integer.parseInt(optionInput);
+			switch (optionInput) {
+				case "1":
+					bank.checkBalance(user);
+					break;
+				case "2":
+					bank.cashDeposit(user);
+					break;
+				case "3":
+					bank.cardlessCashDeposit(user);
+					break;
+				case "4":
+					bank.cashWithdraw(user);
+					break;
+				case "5":
+					bank.miniStatement(user);
+					break;
+				case "6":
+					bank.exit(user);
+					break;
+				default:
+					System.out.println("Invalid option!!!");
+					break;
 			}
-		} while (option != 6);
+		}
+		while (optionInput != "6");
+	}
+		catch(Exception e){
+			System.out.println("Invalid option");
+			bank.startTransaction(user, bank);
+		}
+
 	}
 
 	public void checkBalance(User user) {
@@ -82,7 +93,7 @@ public class BankOperations implements Bank {
 						user.addTransaction(
 								"Deposited : " + addAmount + " INR. Available balance : " + balance + " INR");
 						System.out.println("Amount deposit of " + addAmount + " INR is successful");
-//						System.out.println("Total available balance is " + balance);
+						// System.out.println("Total available balance is " + balance);
 						System.out.println("Thank you " + user.getUserName());
 					} else {
 						System.out.println("Invalid amount entered");
@@ -124,15 +135,15 @@ public class BankOperations implements Bank {
 					System.out.println("2. No");
 					yesOrNo = s.nextInt();
 					switch (yesOrNo) {
-					case 1:
-						continueDeposit(user);
-						confirm = false;
-						break;
-					case 2:
-						System.out.println("Transaction cancelled. Thank you");
-						confirm = false;
-						break;
-					default:
+						case 1:
+							continueDeposit(user);
+							confirm = false;
+							break;
+						case 2:
+							System.out.println("Transaction cancelled. Thank you");
+							confirm = false;
+							break;
+						default:
 
 					}
 				} while (confirm == true);
@@ -180,21 +191,21 @@ public class BankOperations implements Bank {
 			if (amountWithdraw > 0) {
 				System.out.println("Enter 4 digit security pin");
 				String pinCheckInput = s.next();
-
 				int pinCheck = Integer.parseInt(pinCheckInput);
 				if (pinCheck == pin) {
-					balance = balance - amountWithdraw;
-					user.setBalance(balance);
-					user.addTransaction("Withdraw : " + amountWithdraw + " INR. Available balance is : " + balance);
-					System.out.println("Amount withdraw of " + amountWithdraw + " INR is successful");
-					System.out.println("Thank you " + user.getUserName());
+					if (amountWithdraw < balance) {
+						balance = balance - amountWithdraw;
+						user.setBalance(balance);
+						System.out.println("Amount withdraw of " + amountWithdraw + " INR is successful");
+						System.out.println("Thank you " + user.getUserName());
+					} else {
+						System.out.println("No Sufficient balance");
+					}
 				} else {
 					System.out.println("Incorrect pin entered");
-					exit(user);
 				}
 			} else {
 				System.out.println("Invalid amount entered");
-				exit(user);
 			}
 		} catch (Exception e) {
 			System.out.println("Invalid data entered");
